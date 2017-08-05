@@ -24,15 +24,15 @@ try:
                 pwm_led.ChangeDutyCycle(i)
                 sleep(pwm_cycle)
 
-    GPIO.setup(channel_switch, GPIO.IN, pull_up_down=GPIO.PUD_DOWN)
-    GPIO.add_event_detect(channel_switch, GPIO.RISING, callback=callback_flash, bouncetime=1000)
+    GPIO.setup(channel_switch, GPIO.IN, pull_up_down=GPIO.PUD_UP)
+    GPIO.add_event_detect(channel_switch, GPIO.FALLING, callback=callback_flash, bouncetime=1000)
 
     print ("Ready")
     while True:
         sleep(1000)
-
+except KeyboardInterrupt:
     pwm_led.stop()
     GPIO.cleanup()
-except KeyboardInterrupt:
+except RuntimeError:
     pwm_led.stop()
     GPIO.cleanup()

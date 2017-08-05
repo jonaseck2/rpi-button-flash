@@ -1,11 +1,16 @@
 FROM hypriot/rpi-python
 
-CMD ./start.py
-
 RUN apt-get update && apt-get install -y --no-install-recommends \
     gcc \
     make \
-&& rm -rf /var/lib/apt/lists/* \
-&& pip install rpi.gpio
+&& rm -rf /var/lib/apt/lists/*
 
-ADD start.py /data
+RUN mkdir -p /usr/src/app
+WORKDIR /usr/src/app
+
+COPY requirements.txt /usr/src/app/
+RUN pip install -r requirements.txt
+
+COPY . /usr/src/app
+
+CMD ["python", "start.py"]
